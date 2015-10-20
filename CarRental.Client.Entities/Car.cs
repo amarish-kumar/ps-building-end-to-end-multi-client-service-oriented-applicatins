@@ -8,5 +8,13 @@ namespace CarRental.Client.Entities
 {
     public class Car
     {
+        private int _CarId;
+
+        public int CarId
+        {
+            get { return _CarId; }
+            set { _CarId = value; }
+        }
+
     }
 }
