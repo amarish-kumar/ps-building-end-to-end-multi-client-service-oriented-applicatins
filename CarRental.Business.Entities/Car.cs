@@ -1,14 +1,17 @@
-﻿using System;
+﻿using Core.Common.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
+using Core.Common.Contracts;
+
 namespace CarRental.Business.Entities
 {
     [DataContract]//(Namespace ="http://www.pluralsight.com/carrental")
-    public class Car
+    public class Car : EntityBase, IIdentifiableEntity 
     {
         [DataMember]
         public int CarId { get; set; }
@@ -27,5 +30,18 @@ namespace CarRental.Business.Entities
 
         [DataMember]
         public bool CurrentlyRented { get; set; }
+
+        public int EntityId
+        {
+            get
+            {
+                return CarId;
+            }
+
+            set
+            {
+                CarId = value;
+            }
+        }
     }
 }
