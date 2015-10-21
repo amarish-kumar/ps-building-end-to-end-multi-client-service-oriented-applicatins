@@ -9,6 +9,38 @@ namespace CarRental.Client.Entities
     public class Car
     {
         private int _CarId;
+        private string _Description;
+        private string _Color;
+        private decimal _RentalPrice;
+        private bool _CurrentlyRented;
+
+        public bool CurrentlyRented
+        {
+            get { return _CurrentlyRented; }
+            set { _CurrentlyRented = value; }
+        }
+
+
+        public decimal RentalPrice
+        {
+            get { return _RentalPrice; }
+            set { _RentalPrice = value; }
+        }
+
+
+        public string Color
+        {
+            get { return _Color; }
+            set { _Color = value; }
+        }
+
+
+        public string Description
+        {
+            get { return _Description; }
+            set { _Description = value; }
+        }
+
 
         public int CarId
         {

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CarRental.Business.Entities
 {
-    [DataContract]
+    [DataContract]//(Namespace ="http://www.pluralsight.com/carrental")
     public class Car
     {
         [DataMember]
