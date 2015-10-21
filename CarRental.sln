@@ -11,6 +11,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarRental.Business.Entities
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarRental.Client.Entities", "CarRental.Client.Entities\CarRental.Client.Entities.csproj", "{90856995-0134-4643-9760-C77F50D5D009}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{0B4EF77E-50A6-4859-8BF2-B62FE2B7B868}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Common", "Core.Common\Core.Common.csproj", "{62A5CD4D-3671-44E1-A8E8-4DA04E6B8687}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Common.Contracts", "Core.Common.Contracts\Core.Common.Contracts.csproj", "{5FB87B13-3735-4375-89DE-2B4903868B96}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +31,14 @@ Global
 		{90856995-0134-4643-9760-C77F50D5D009}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{90856995-0134-4643-9760-C77F50D5D009}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{90856995-0134-4643-9760-C77F50D5D009}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62A5CD4D-3671-44E1-A8E8-4DA04E6B8687}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62A5CD4D-3671-44E1-A8E8-4DA04E6B8687}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62A5CD4D-3671-44E1-A8E8-4DA04E6B8687}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62A5CD4D-3671-44E1-A8E8-4DA04E6B8687}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FB87B13-3735-4375-89DE-2B4903868B96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FB87B13-3735-4375-89DE-2B4903868B96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FB87B13-3735-4375-89DE-2B4903868B96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FB87B13-3735-4375-89DE-2B4903868B96}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -32,5 +46,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{1B80C4F8-0A60-486E-9153-448690BD8B38} = {03FB881D-211D-424F-8EBF-78D54801AE61}
 		{90856995-0134-4643-9760-C77F50D5D009} = {4B55608A-C949-4B98-A1D8-591635C78D9F}
+		{62A5CD4D-3671-44E1-A8E8-4DA04E6B8687} = {0B4EF77E-50A6-4859-8BF2-B62FE2B7B868}
+		{5FB87B13-3735-4375-89DE-2B4903868B96} = {0B4EF77E-50A6-4859-8BF2-B62FE2B7B868}
 	EndGlobalSection
 EndGlobal
