@@ -22,5 +22,23 @@ namespace Core.Common.Core
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
+
+        protected virtual void OnPropertyChanged(string propertyName, bool makeDirty)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+
+            if (makeDirty)
+                _IsDirty = true;
+        }
+
+        bool _IsDirty;
+
+        public bool IsDirty
+        {
+            get {
+                return _IsDirty; 
+            }
+        }
     }
 }
