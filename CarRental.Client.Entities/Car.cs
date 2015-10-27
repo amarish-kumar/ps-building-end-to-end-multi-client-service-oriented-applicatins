@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Core.Common.Core;
+
 namespace CarRental.Client.Entities
 {
-    public class Car
+    public class Car : TempObjectBase
     {
         private int _CarId;
         private string _Description;
@@ -45,7 +47,15 @@ namespace CarRental.Client.Entities
         public int CarId
         {
             get { return _CarId; }
-            set { _CarId = value; }
+            set
+            {
+                if (_CarId != value)
+                {
+                    _CarId = value;
+
+                    OnPropertyChanged("CarId");
+                }
+            }
         }
 
     }
