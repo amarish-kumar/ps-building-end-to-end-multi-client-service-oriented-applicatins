@@ -13,20 +13,38 @@ namespace Core.Common.Core
         /// <summary>
         /// El evento del property changed
         /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
+        private event PropertyChangedEventHandler _PropertyChanged;
+
+        List<PropertyChangedEventHandler> _PropertyChangedSubscribers = new List<PropertyChangedEventHandler>();
+
+        public event PropertyChangedEventHandler PropertyChanged {
+            add
+            {
+                if (!_PropertyChangedSubscribers.Contains(value))
+                {
+                    _PropertyChanged += value;
+                    _PropertyChangedSubscribers.Add(value);
+                }
+            }
+            remove
+            {
+                _PropertyChanged -= value;
+                _PropertyChangedSubscribers.Remove(value);
+            }
+        }
 
         protected virtual void OnPropertyChanged(string propertyName)
         {
-            if (PropertyChanged != null)
+            if (_PropertyChanged != null)
             {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                _PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
 
         protected virtual void OnPropertyChanged(string propertyName, bool makeDirty)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            if (_PropertyChanged != null)
+                _PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 
             if (makeDirty)
                 _IsDirty = true;
