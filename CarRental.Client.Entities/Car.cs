@@ -53,7 +53,8 @@ namespace CarRental.Client.Entities
                 {
                     _CarId = value;
 
-                    OnPropertyChanged("CarId");
+                    //OnPropertyChanged("CarId");
+                    OnPropertyChanged(() => CarId);
                 }
             }
         }

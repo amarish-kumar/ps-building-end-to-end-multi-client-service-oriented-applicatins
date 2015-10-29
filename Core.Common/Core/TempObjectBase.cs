@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 using System.ComponentModel;
+using System.Linq.Expressions;
+using Core.Common.Utils;
 
 namespace Core.Common.Core
 {
@@ -33,12 +35,27 @@ namespace Core.Common.Core
             }
         }
 
+        /// <summary>
+        /// by string property name
+        /// </summary>
+        /// <param name="propertyName"></param>
         protected virtual void OnPropertyChanged(string propertyName)
         {
             if (_PropertyChanged != null)
             {
                 _PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
+        }
+
+        /// <summary>
+        /// strongly typed property changed
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="propertyExpression"></param>
+        protected virtual void OnPropertyChanged<T>(Expression<Func<T>> propertyExpression)
+        {
+            string propertyName = PropertySupport.ExtractPropertyName(propertyExpression);
+            OnPropertyChanged(propertyName);
         }
 
         protected virtual void OnPropertyChanged(string propertyName, bool makeDirty)
