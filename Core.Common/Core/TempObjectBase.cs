@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Linq.Expressions;
 using Core.Common.Utils;
+using System.Reflection;
+using System.Collections;
+using Core.Common.Extensions;
 
 namespace Core.Common.Core
 {
@@ -74,6 +77,109 @@ namespace Core.Common.Core
             get {
                 return _IsDirty; 
             }
+            set {
+                _IsDirty = value;
+            }
+        }
+
+        public virtual bool IsAnythingDirty()
+        {
+            bool isDirty = false;
+
+            WalkObjectGraph(
+            o =>
+            {
+                if (o.IsDirty)
+                {
+                    isDirty = true;
+                    return true; // short circuit
+                }
+                else
+                    return false;
+            }, coll => { });
+
+            return isDirty;
+        }
+
+        public void CleanAll()
+        {
+            WalkObjectGraph(
+            o =>
+            {
+                if (o.IsDirty)
+                    o.IsDirty = false;
+                return false;
+            }, coll => { });
+        }
+
+        public List<TempObjectBase> GetDirtyObjects()
+        {
+            List<TempObjectBase> dirtyObjects = new List<TempObjectBase>();
+
+            WalkObjectGraph(
+            o =>
+            {
+                if (o.IsDirty)
+                    dirtyObjects.Add(o);
+
+                return false;
+            }, coll => { });
+
+            return dirtyObjects;
+        }
+
+        protected void WalkObjectGraph(Func<TempObjectBase, bool> snippetForObject,
+                                       Action<IList> snippetForCollection,
+                                       params string[] exemptProperties)
+        {
+            List<TempObjectBase> visited = new List<TempObjectBase>();
+            Action<TempObjectBase> walk = null;
+
+            List<string> exemptions = new List<string>();
+            if (exemptProperties != null)
+                exemptions = exemptProperties.ToList();
+
+            walk = (o) =>
+            {
+                if (o != null && !visited.Contains(o))
+                {
+                    visited.Add(o);
+
+                    bool exitWalk = snippetForObject.Invoke(o);
+
+                    if (!exitWalk)
+                    {
+                        PropertyInfo[] properties = o.GetBrowsableProperties();
+                        foreach (PropertyInfo property in properties)
+                        {
+                            if (!exemptions.Contains(property.Name))
+                            {
+                                if (property.PropertyType.IsSubclassOf(typeof(TempObjectBase)))
+                                {
+                                    TempObjectBase obj = (TempObjectBase)(property.GetValue(o, null));
+                                    walk(obj);
+                                }
+                                else
+                                {
+                                    IList coll = property.GetValue(o, null) as IList;
+                                    if (coll != null)
+                                    {
+                                        snippetForCollection.Invoke(coll);
+
+                                        foreach (object item in coll)
+                                        {
+                                            if (item is TempObjectBase)
+                                                walk((TempObjectBase)item);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+
+            walk(this);
         }
     }
 }
