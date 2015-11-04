@@ -13,7 +13,7 @@ using Core.Common.Extensions;
 
 namespace Core.Common.Core
 {
-    public class TempObjectBase : INotifyPropertyChanged
+    public class ObjectBase : INotifyPropertyChanged
     {
         /// <summary>
         /// El evento del property changed
@@ -112,9 +112,9 @@ namespace Core.Common.Core
             }, coll => { });
         }
 
-        public List<TempObjectBase> GetDirtyObjects()
+        public List<ObjectBase> GetDirtyObjects()
         {
-            List<TempObjectBase> dirtyObjects = new List<TempObjectBase>();
+            List<ObjectBase> dirtyObjects = new List<ObjectBase>();
 
             WalkObjectGraph(
             o =>
@@ -128,12 +128,12 @@ namespace Core.Common.Core
             return dirtyObjects;
         }
 
-        protected void WalkObjectGraph(Func<TempObjectBase, bool> snippetForObject,
+        protected void WalkObjectGraph(Func<ObjectBase, bool> snippetForObject,
                                        Action<IList> snippetForCollection,
                                        params string[] exemptProperties)
         {
-            List<TempObjectBase> visited = new List<TempObjectBase>();
-            Action<TempObjectBase> walk = null;
+            List<ObjectBase> visited = new List<ObjectBase>();
+            Action<ObjectBase> walk = null;
 
             List<string> exemptions = new List<string>();
             if (exemptProperties != null)
@@ -154,9 +154,9 @@ namespace Core.Common.Core
                         {
                             if (!exemptions.Contains(property.Name))
                             {
-                                if (property.PropertyType.IsSubclassOf(typeof(TempObjectBase)))
+                                if (property.PropertyType.IsSubclassOf(typeof(ObjectBase)))
                                 {
-                                    TempObjectBase obj = (TempObjectBase)(property.GetValue(o, null));
+                                    ObjectBase obj = (ObjectBase)(property.GetValue(o, null));
                                     walk(obj);
                                 }
                                 else
@@ -168,8 +168,8 @@ namespace Core.Common.Core
 
                                         foreach (object item in coll)
                                         {
-                                            if (item is TempObjectBase)
-                                                walk((TempObjectBase)item);
+                                            if (item is ObjectBase)
+                                                walk((ObjectBase)item);
                                         }
                                     }
                                 }

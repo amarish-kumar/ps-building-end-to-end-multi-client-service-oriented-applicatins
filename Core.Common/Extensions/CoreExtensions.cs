@@ -27,13 +27,13 @@ namespace Core.Common.Extensions
             return navigable;
         }
 
-        public static bool IsNavigable(this TempObjectBase obj, string propertyName)
+        public static bool IsNavigable(this ObjectBase obj, string propertyName)
         {
             PropertyInfo propertyInfo = obj.GetType().GetProperty(propertyName);
             return propertyInfo.IsNavigable();
         }
 
-        public static bool IsNavigable<T>(this TempObjectBase obj, Expression<Func<T>> propertyExpression)
+        public static bool IsNavigable<T>(this ObjectBase obj, Expression<Func<T>> propertyExpression)
         {
             string propertyName = PropertySupport.ExtractPropertyName(propertyExpression);
             PropertyInfo propertyInfo = obj.GetType().GetProperty(propertyName);
@@ -63,7 +63,7 @@ namespace Core.Common.Extensions
                 PropertyInfo[] properties = obj.GetType().GetProperties();
                 foreach (PropertyInfo property in properties)
                 {
-                    if ((property.PropertyType.IsSubclassOf(typeof(TempObjectBase)) || property.PropertyType.GetInterface("IList") != null))
+                    if ((property.PropertyType.IsSubclassOf(typeof(ObjectBase)) || property.PropertyType.GetInterface("IList") != null))
                     {
                         // only add to list of the property is NOT marked with [NotNavigable]
                         if (IsBrowsable(obj, property))
