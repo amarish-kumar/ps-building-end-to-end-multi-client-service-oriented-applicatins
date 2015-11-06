@@ -11,10 +11,57 @@ using System.Reflection;
 using System.Collections;
 using Core.Common.Extensions;
 
+using FluentValidation;
+using FluentValidation.Results;
+
 namespace Core.Common.Core
 {
-    public class ObjectBase : INotifyPropertyChanged
+    /// <summary>
+    /// IDataErrorInfo es para xaml
+    /// </summary>
+    public abstract class ObjectBase : INotifyPropertyChanged, IDataErrorInfo
     {
+        public ObjectBase()
+        {
+            _Validator = GetValidator();
+            Validate();
+        }
+
+        protected IValidator _Validator = null;
+        protected IEnumerable<ValidationFailure> _ValidationErrors = null;
+
+        protected virtual IValidator GetValidator()
+        {
+            return null;
+        }
+
+        [NotNavigable]
+        public IEnumerable<ValidationFailure> ValidationErrors
+        {
+            get { return _ValidationErrors; }
+            set { }
+        }
+
+        public void Validate()
+        {
+            if (_Validator != null)
+            {
+                ValidationResult results = _Validator.Validate(this);
+                _ValidationErrors = results.Errors;
+            }
+        }
+
+        [NotNavigable]
+        public virtual bool IsValid
+        {
+            get {
+                if (_ValidationErrors != null && _ValidationErrors.Count() > 0)
+                    return false;
+                else
+                    return true;
+            }
+        }
+
         /// <summary>
         /// El evento del property changed
         /// </summary>
@@ -82,6 +129,33 @@ namespace Core.Common.Core
             }
         }
 
+        public string Error
+        {
+            get
+            {
+                return string.Empty;
+            }
+        }
+
+        string IDataErrorInfo.this[string columnName]
+        {
+            get
+            {
+                StringBuilder errors = new StringBuilder();
+
+                if (_ValidationErrors != null && _ValidationErrors.Count() > 0)
+                {
+                    foreach (ValidationFailure validationError in _ValidationErrors)
+                    {
+                        if (validationError.PropertyName == columnName)
+                            errors.AppendLine(validationError.ErrorMessage);
+                    }
+                }
+
+                return errors.ToString();
+            }
+        }
+
         public virtual bool IsAnythingDirty()
         {
             bool isDirty = false;
@@ -128,9 +202,7 @@ namespace Core.Common.Core
             return dirtyObjects;
         }
 
-        protected void WalkObjectGraph(Func<ObjectBase, bool> snippetForObject,
-                                       Action<IList> snippetForCollection,
-                                       params string[] exemptProperties)
+        protected void WalkObjectGraph(Func<ObjectBase, bool> snippetForObject, Action<IList> snippetForCollection, params string[] exemptProperties)
         {
             List<ObjectBase> visited = new List<ObjectBase>();
             Action<ObjectBase> walk = null;
