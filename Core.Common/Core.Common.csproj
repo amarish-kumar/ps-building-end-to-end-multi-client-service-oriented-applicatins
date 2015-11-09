@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\EntityBase.cs" />
+    <Compile Include="Core\NotificationObject.cs" />
     <Compile Include="Core\NotNavigableAttribute.cs" />
     <Compile Include="Core\ObjectBase.cs" />
     <Compile Include="Extensions\CoreExtensions.cs" />
@@ -54,6 +55,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Core.Common.Contracts\Core.Common.Contracts.csproj">
+      <Project>{5fb87b13-3735-4375-89de-2b4903868b96}</Project>
+      <Name>Core.Common.Contracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -10,6 +10,7 @@ using Core.Common.Utils;
 using System.Reflection;
 using System.Collections;
 using Core.Common.Extensions;
+using Core.Common.Contracts;
 
 using FluentValidation;
 using FluentValidation.Results;
@@ -19,7 +20,7 @@ namespace Core.Common.Core
     /// <summary>
     /// IDataErrorInfo es para xaml
     /// </summary>
-    public abstract class ObjectBase : INotifyPropertyChanged, IDataErrorInfo
+    public abstract class ObjectBase : NotificationObject, IDirtyCapable, IDataErrorInfo
     {
         public ObjectBase()
         {
@@ -67,54 +68,43 @@ namespace Core.Common.Core
         /// </summary>
         private event PropertyChangedEventHandler _PropertyChanged;
 
-        List<PropertyChangedEventHandler> _PropertyChangedSubscribers = new List<PropertyChangedEventHandler>();
+        //List<PropertyChangedEventHandler> _PropertyChangedSubscribers = new List<PropertyChangedEventHandler>();
 
-        public event PropertyChangedEventHandler PropertyChanged {
-            add
-            {
-                if (!_PropertyChangedSubscribers.Contains(value))
-                {
-                    _PropertyChanged += value;
-                    _PropertyChangedSubscribers.Add(value);
-                }
-            }
-            remove
-            {
-                _PropertyChanged -= value;
-                _PropertyChangedSubscribers.Remove(value);
-            }
-        }
+        //public event PropertyChangedEventHandler PropertyChanged {
+        //    add
+        //    {
+        //        if (!_PropertyChangedSubscribers.Contains(value))
+        //        {
+        //            _PropertyChanged += value;
+        //            _PropertyChangedSubscribers.Add(value);
+        //        }
+        //    }
+        //    remove
+        //    {
+        //        _PropertyChanged -= value;
+        //        _PropertyChangedSubscribers.Remove(value);
+        //    }
+        //}
 
-        /// <summary>
-        /// by string property name
-        /// </summary>
-        /// <param name="propertyName"></param>
-        protected virtual void OnPropertyChanged(string propertyName)
+        protected override void OnPropertyChanged(string propertyName)
         {
-            if (_PropertyChanged != null)
-            {
-                _PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
+            OnPropertyChanged(propertyName, true);
         }
 
-        /// <summary>
-        /// strongly typed property changed
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="propertyExpression"></param>
-        protected virtual void OnPropertyChanged<T>(Expression<Func<T>> propertyExpression)
+        protected void OnPropertyChanged<T>(Expression<Func<T>> propertyExpression, bool makeDirty)
         {
             string propertyName = PropertySupport.ExtractPropertyName(propertyExpression);
-            OnPropertyChanged(propertyName);
+            OnPropertyChanged(propertyName, makeDirty);
         }
 
-        protected virtual void OnPropertyChanged(string propertyName, bool makeDirty)
+        protected void OnPropertyChanged(string propertyName, bool makeDirty)
         {
-            if (_PropertyChanged != null)
-                _PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            base.OnPropertyChanged(propertyName);
 
             if (makeDirty)
-                _IsDirty = true;
+                IsDirty = true;
+
+            Validate();
         }
 
         bool _IsDirty;
@@ -186,9 +176,9 @@ namespace Core.Common.Core
             }, coll => { });
         }
 
-        public List<ObjectBase> GetDirtyObjects()
+        public List<IDirtyCapable> GetDirtyObjects()
         {
-            List<ObjectBase> dirtyObjects = new List<ObjectBase>();
+            List<IDirtyCapable> dirtyObjects = new List<IDirtyCapable>();
 
             WalkObjectGraph(
             o =>
