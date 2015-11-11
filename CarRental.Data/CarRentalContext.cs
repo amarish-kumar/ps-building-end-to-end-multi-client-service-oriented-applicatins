@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 
 using System.Data.Entity;
+using CarRental.Business.Entities;
 
 namespace CarRental.Data
 {
@@ -13,5 +14,11 @@ namespace CarRental.Data
         {
             Database.SetInitializer<CarRentalContext>(null);
         }
+
+        public DbSet<Account> AccountSet { get; set; }
+        public DbSet<Car> CarSet { get; set; }
+        public DbSet<Rental> RentalSet { get; set; }
+        public DbSet<Reservation> ReservationSet { get; set; }
+
     }
 }
