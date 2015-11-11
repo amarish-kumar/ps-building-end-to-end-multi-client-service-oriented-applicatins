@@ -5,6 +5,9 @@ using System.Text;
 
 using System.Data.Entity;
 using CarRental.Business.Entities;
+using System.Data.Entity.ModelConfiguration.Conventions;
+using System.Runtime.Serialization;
+using Core.Common.Contracts;
 
 namespace CarRental.Data
 {
@@ -20,5 +23,17 @@ namespace CarRental.Data
         public DbSet<Rental> RentalSet { get; set; }
         public DbSet<Reservation> ReservationSet { get; set; }
 
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            // EF thinks that tables are pluralized in db
+            modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+
+            // ignore the extension data object property
+            modelBuilder.Ignore<ExtensionDataObject>();
+            modelBuilder.Ignore<IIdentifiableEntity>();
+            
+            
+            //base.OnModelCreating(modelBuilder);
+        }
     }
 }
