@@ -31,8 +31,15 @@ namespace CarRental.Data
             // ignore the extension data object property
             modelBuilder.Ignore<ExtensionDataObject>();
             modelBuilder.Ignore<IIdentifiableEntity>();
-            
-            
+
+            // assign the id
+            modelBuilder.Entity<Account>().HasKey<int>(e => e.AccountId).Ignore(e => e.EntityId);
+            modelBuilder.Entity<Car>().HasKey<int>(e => e.CarId).Ignore(e => e.EntityId);
+            modelBuilder.Entity<Rental>().HasKey<int>(e => e.RentalId).Ignore(e => e.EntityId);
+            modelBuilder.Entity<Reservation>().HasKey<int>(e => e.ReservationId).Ignore(e => e.EntityId);
+
+            modelBuilder.Entity<Car>().Ignore(e => e.CurrentlyRented);
+
             //base.OnModelCreating(modelBuilder);
         }
     }
