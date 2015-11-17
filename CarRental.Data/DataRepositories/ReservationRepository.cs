@@ -14,6 +14,8 @@ using CarRental.Data.Contracts;
 
 namespace CarRental.Data.DataRepositories
 {
+    [Export(typeof(IReservationRepository))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     public class ReservationRepository : DataRepositoryBase<Reservation>, IReservationRepository
     {
         public IEnumerable<CustomerReservationInfo> GetCurrentCustomerReservationInfo()
