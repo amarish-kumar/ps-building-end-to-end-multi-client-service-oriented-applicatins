@@ -14,6 +14,7 @@ using Core.Common.Contracts;
 
 using FluentValidation;
 using FluentValidation.Results;
+using System.ComponentModel.Composition.Hosting;
 
 namespace Core.Common.Core
 {
@@ -30,6 +31,8 @@ namespace Core.Common.Core
 
         protected IValidator _Validator = null;
         protected IEnumerable<ValidationFailure> _ValidationErrors = null;
+
+        public static CompositionContainer Container { get; set; }
 
         protected virtual IValidator GetValidator()
         {
