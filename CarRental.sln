@@ -31,6 +31,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarRental.Data.Tests", "Car
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarRental.Business.Bootstrapper", "CarRental.Business.Bootstrapper\CarRental.Business.Bootstrapper.csproj", "{1F08B562-23CB-40E6-9C9F-298C7B2EE9B0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarRental.Business.Contracts", "CarRental.Business.Contracts\CarRental.Business.Contracts.csproj", "{564BA9D8-C6CA-4B15-A37A-9A9673D62733}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarRental.Business.Managers", "CarRental.Business.Managers\CarRental.Business.Managers.csproj", "{A83F35DE-D998-4A27-B98C-8320090D7F56}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +77,14 @@ Global
 		{1F08B562-23CB-40E6-9C9F-298C7B2EE9B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1F08B562-23CB-40E6-9C9F-298C7B2EE9B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1F08B562-23CB-40E6-9C9F-298C7B2EE9B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{564BA9D8-C6CA-4B15-A37A-9A9673D62733}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{564BA9D8-C6CA-4B15-A37A-9A9673D62733}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{564BA9D8-C6CA-4B15-A37A-9A9673D62733}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{564BA9D8-C6CA-4B15-A37A-9A9673D62733}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A83F35DE-D998-4A27-B98C-8320090D7F56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A83F35DE-D998-4A27-B98C-8320090D7F56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A83F35DE-D998-4A27-B98C-8320090D7F56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A83F35DE-D998-4A27-B98C-8320090D7F56}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -87,5 +99,7 @@ Global
 		{89305A7A-41B4-45C9-A935-634BB5BFF3BE} = {D080A5F1-202B-4516-B6C4-B043C3AF9347}
 		{B3761E84-5178-430F-BD8C-5309503B1112} = {1BEDAD0A-B347-4979-BFD2-4D0E38CE2FB4}
 		{1F08B562-23CB-40E6-9C9F-298C7B2EE9B0} = {03FB881D-211D-424F-8EBF-78D54801AE61}
+		{564BA9D8-C6CA-4B15-A37A-9A9673D62733} = {03FB881D-211D-424F-8EBF-78D54801AE61}
+		{A83F35DE-D998-4A27-B98C-8320090D7F56} = {03FB881D-211D-424F-8EBF-78D54801AE61}
 	EndGlobalSection
 EndGlobal
