@@ -56,7 +56,26 @@ namespace CarRental.Business.Managers
 
         public Car[] GetAllCars()
         {
-            throw new NotImplementedException();
+            try
+            {
+                ICarRepository carRepository = _dataRepositoryFactory.GetDataRepository<ICarRepository>();
+                IRentalRepository rentalRepository = _dataRepositoryFactory.GetDataRepository<IRentalRepository>();
+
+                IEnumerable<Car> cars = carRepository.Get();
+                IEnumerable<Rental> rentedCars = rentalRepository.GetCurrentlyRentedCars();
+
+                foreach (Car car in cars)
+                {
+                    Rental rentedCar = rentedCars.Where(item => item.CarId == car.CarId).FirstOrDefault();
+                    car.CurrentlyRented = (rentedCar != null);
+                }
+
+                return cars.ToArray();
+            }
+            catch (Exception ex)
+            {
+                throw new FaultException(ex.Message);
+            }
         }
     }
 }
