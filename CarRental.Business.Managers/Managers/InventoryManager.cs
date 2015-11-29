@@ -8,6 +8,9 @@ using Core.Common.Core;
 using CarRental.Business.Contracts;
 using System.ComponentModel.Composition;
 using CarRental.Business.Entities;
+using CarRental.Data.Contracts.RepositoryInterfaces;
+using Core.Common.Exceptions;
+using System.ServiceModel;
 
 namespace CarRental.Business.Managers
 {
@@ -28,7 +31,27 @@ namespace CarRental.Business.Managers
 
         public Car GetCar(int carId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                ICarRepository carRepository = _dataRepositoryFactory.GetDataRepository<ICarRepository>();
+                Car carEntity = carRepository.Get(carId);
+
+                if (carEntity == null)
+                {
+                    NotFoundException ex = new NotFoundException(string.Format("Car with ID of {0} is not in the database", carId));
+                    throw new FaultException<NotFoundException>(ex, ex.Message);
+                }
+
+                return carEntity;
+            }
+            catch (FaultException ex)
+            {
+                throw ex;
+            }
+            catch (Exception ex)
+            {
+                throw new FaultException(ex.Message);
+            }
         }
 
         public Car[] GetAllCars()
