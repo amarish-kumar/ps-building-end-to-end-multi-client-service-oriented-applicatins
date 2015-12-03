@@ -51,6 +51,10 @@
       <Project>{1b80c4f8-0a60-486e-9153-448690bd8b38}</Project>
       <Name>CarRental.Business.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Core.Common\Core.Common.csproj">
+      <Project>{62a5cd4d-3671-44e1-a8e8-4da04e6b8687}</Project>
+      <Name>Core.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

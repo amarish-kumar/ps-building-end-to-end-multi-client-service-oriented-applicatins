@@ -5,6 +5,7 @@ using System.Text;
 
 using System.ServiceModel;
 using CarRental.Business.Entities;
+using Core.Common.Exceptions;
 
 namespace CarRental.Business.Contracts
 {
@@ -12,6 +13,7 @@ namespace CarRental.Business.Contracts
     public interface IInventoryService
     {
         [OperationContract]
+        [FaultContract(typeof(NotFoundException))]// WCF necesita saber que puede retornar esto
         Car GetCar(int carId);
 
         [OperationContract]
