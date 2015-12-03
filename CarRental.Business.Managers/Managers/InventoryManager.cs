@@ -15,11 +15,11 @@ using System.ServiceModel;
 namespace CarRental.Business.Managers
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, ConcurrencyMode = ConcurrencyMode.Multiple, ReleaseServiceInstanceOnTransactionComplete = false)]
-    public class InventoryManager : IInventoryService
+    public class InventoryManager : ManagerBase, IInventoryService
     {
         public InventoryManager()
         {
-            ObjectBase.Container.SatisfyImportsOnce(this);
+            
         }
 
         public InventoryManager(IDataRepositoryFactory dataRepositoryFactory)
@@ -32,7 +32,9 @@ namespace CarRental.Business.Managers
 
         public Car GetCar(int carId)
         {
-            try
+            /*try
+            {*/
+            return ExecuteFaultHandledOperation(() =>
             {
                 ICarRepository carRepository = _dataRepositoryFactory.GetDataRepository<ICarRepository>();
                 Car carEntity = carRepository.Get(carId);
@@ -44,7 +46,8 @@ namespace CarRental.Business.Managers
                 }
 
                 return carEntity;
-            }
+            });
+            /*}
             catch (FaultException ex)
             {
                 throw ex;
@@ -53,6 +56,7 @@ namespace CarRental.Business.Managers
             {
                 throw new FaultException(ex.Message);
             }
+            */
         }
 
         public Car[] GetAllCars()
