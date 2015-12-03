@@ -14,6 +14,7 @@ using System.ServiceModel;
 
 namespace CarRental.Business.Managers
 {
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, ConcurrencyMode = ConcurrencyMode.Multiple, ReleaseServiceInstanceOnTransactionComplete = false)]
     public class InventoryManager : IInventoryService
     {
         public InventoryManager()
