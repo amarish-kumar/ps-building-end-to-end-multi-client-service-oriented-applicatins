@@ -107,7 +107,24 @@ namespace CarRental.Business.Managers
 
         public Car[] GetAvailableCars(DateTime pickupDate, DateTime returnDate)
         {
-            throw new NotImplementedException();
+            return ExecuteFaultHandledOperation(() => {
+                ICarRepository carRepository = _dataRepositoryFactory.GetDataRepository<ICarRepository>();
+                IRentalRepository rentalRepository = _dataRepositoryFactory.GetDataRepository<IRentalRepository>();
+                IReservationRepository reservationRepository = _dataRepositoryFactory.GetDataRepository<IReservationRepository>();
+
+                IEnumerable<Car> allCars = carRepository.Get();
+                IEnumerable<Rental> rentedCars = rentalRepository.GetCurrentlyRentedCars();
+                IEnumerable<Reservation> reservedCars = reservationRepository.Get();
+
+                List<Car> availableCars = new List<Car>();
+
+                foreach (Car car in allCars)
+                {
+
+                }
+
+                return availableCars.ToArray();
+            });
         }
     }
 }
