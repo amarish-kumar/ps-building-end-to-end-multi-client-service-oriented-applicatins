@@ -11,6 +11,7 @@ using CarRental.Business.Entities;
 using CarRental.Data.Contracts.RepositoryInterfaces;
 using Core.Common.Exceptions;
 using System.ServiceModel;
+using CarRental.Business.Common;
 
 namespace CarRental.Business.Managers
 {
@@ -27,8 +28,21 @@ namespace CarRental.Business.Managers
             _dataRepositoryFactory = dataRepositoryFactory;
         }
 
+        public InventoryManager(IBusinessEngineFactory businessEngineFactory)
+        {
+            _businessEngineFactory = businessEngineFactory;
+        }
+
+        public InventoryManager(IDataRepositoryFactory dataRepositoryFactory, IBusinessEngineFactory businessEngineFactory)
+        {
+            _dataRepositoryFactory = dataRepositoryFactory;
+            _businessEngineFactory = businessEngineFactory;
+        }
+
         [Import]
         IDataRepositoryFactory _dataRepositoryFactory;
+        [Import]
+        IBusinessEngineFactory _businessEngineFactory;
 
         public Car GetCar(int carId)
         {
@@ -112,6 +126,8 @@ namespace CarRental.Business.Managers
                 IRentalRepository rentalRepository = _dataRepositoryFactory.GetDataRepository<IRentalRepository>();
                 IReservationRepository reservationRepository = _dataRepositoryFactory.GetDataRepository<IReservationRepository>();
 
+                ICarRentalEngine carRentalEngine = _businessEngineFactory.GetBusinessEngine<ICarRentalEngine>();
+
                 IEnumerable<Car> allCars = carRepository.Get();
                 IEnumerable<Rental> rentedCars = rentalRepository.GetCurrentlyRentedCars();
                 IEnumerable<Reservation> reservedCars = reservationRepository.Get();
@@ -120,7 +136,15 @@ namespace CarRental.Business.Managers
 
                 foreach (Car car in allCars)
                 {
-                    if (1 == 1)
+                    if (
+                            carRentalEngine.IsCarAvailableForRental(
+                                carId: car.CarId,
+                                pickupDate: pickupDate,
+                                returnDate: returnDate,
+                                rentedCars: rentedCars,
+                                reservedCars: reservedCars
+                                )
+                        )
                         availableCars.Add(car);
                 }
 
