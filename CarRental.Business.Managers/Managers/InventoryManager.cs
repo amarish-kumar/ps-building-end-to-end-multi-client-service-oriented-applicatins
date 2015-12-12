@@ -61,8 +61,7 @@ namespace CarRental.Business.Managers
 
         public Car[] GetAllCars()
         {
-            try
-            {
+            return ExecuteFaultHandledOperation(() => {
                 ICarRepository carRepository = _dataRepositoryFactory.GetDataRepository<ICarRepository>();
                 IRentalRepository rentalRepository = _dataRepositoryFactory.GetDataRepository<IRentalRepository>();
 
@@ -76,11 +75,39 @@ namespace CarRental.Business.Managers
                 }
 
                 return cars.ToArray();
-            }
-            catch (Exception ex)
-            {
-                throw new FaultException(ex.Message);
-            }
+            });
+        }
+
+        [OperationBehavior(TransactionScopeRequired = true)]
+        public Car Update(Car car)
+        {
+            return ExecuteFaultHandledOperation(() => {
+                ICarRepository carRepository = _dataRepositoryFactory.GetDataRepository<ICarRepository>();
+
+                Car updatedEntity = null;
+
+                if (car.CarId == 0)
+                    updatedEntity = carRepository.Add(car);
+                else
+                    updatedEntity = carRepository.Update(car);
+
+                return updatedEntity;
+            });
+        }
+
+        [OperationBehavior(TransactionScopeRequired = true)]
+        public void DeleteCar(int carId)
+        {
+            ExecuteFaultHandledOperation(() => {
+                ICarRepository carRepository = _dataRepositoryFactory.GetDataRepository<ICarRepository>();
+
+                carRepository.Remove(carId);
+            });
+        }
+
+        public Car[] GetAvailableCars(DateTime pickupDate, DateTime returnDate)
+        {
+            throw new NotImplementedException();
         }
     }
 }

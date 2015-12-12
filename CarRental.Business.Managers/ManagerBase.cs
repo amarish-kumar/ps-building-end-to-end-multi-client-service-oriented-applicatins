@@ -33,5 +33,25 @@ namespace CarRental.Business.Managers
                 throw new FaultException(ex.Message);
             }
         }
+
+        /// <summary>
+        /// void
+        /// </summary>
+        /// <param name="codeToExecute"></param>
+        protected void ExecuteFaultHandledOperation(Action codeToExecute)
+        {
+            try
+            {
+                codeToExecute.Invoke();
+            }
+            catch (FaultException ex)
+            {
+                throw ex;
+            }
+            catch (Exception ex)
+            {
+                throw new FaultException(ex.Message);
+            }
+        }
     }
 }

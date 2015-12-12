@@ -18,5 +18,16 @@ namespace CarRental.Business.Contracts
 
         [OperationContract]
         Car[] GetAllCars();
+
+        [OperationContract]
+        [TransactionFlow(TransactionFlowOption.Allowed)]
+        Car Update(Car car);
+
+        [OperationContract]
+        [TransactionFlow(TransactionFlowOption.Allowed)]
+        void DeleteCar(int carId);
+
+        [OperationContract]
+        Car[] GetAvailableCars(DateTime pickupDate, DateTime returnDate);
     }
 }
