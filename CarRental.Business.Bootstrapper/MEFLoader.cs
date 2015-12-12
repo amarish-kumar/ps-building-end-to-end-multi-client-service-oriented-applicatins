@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 using System.ComponentModel.Composition.Hosting;
 using CarRental.Data.DataRepositories;
+using CarRental.Business.BusinessEngines;
 
 namespace CarRental.Business.Bootstrapper
 {
@@ -18,6 +19,7 @@ namespace CarRental.Business.Bootstrapper
 
             // add items to catalog here
             catalog.Catalogs.Add(new AssemblyCatalog(typeof(AccountRepository).Assembly));
+            catalog.Catalogs.Add(new AssemblyCatalog(typeof(CarRentalEngine).Assembly));
 
             CompositionContainer container = new CompositionContainer(catalog);
 

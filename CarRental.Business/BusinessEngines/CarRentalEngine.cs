@@ -4,10 +4,14 @@ using System.Linq;
 using System.Text;
 
 using CarRental.Business.Entities;
+using CarRental.Business.Common;
+using System.ComponentModel.Composition;
 
 namespace CarRental.Business.BusinessEngines
 {
-    public class CarRentalEngine
+    [Export(typeof(ICarRentalEngine))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
+    public class CarRentalEngine : ICarRentalEngine
     {
         public bool IsCarAvailableForRental(int carId, DateTime pickupDate, DateTime returnDate, IEnumerable<Rental> rentedCars, IEnumerable<Reservation> reservedCars)
         {
