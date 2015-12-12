@@ -120,7 +120,8 @@ namespace CarRental.Business.Managers
 
                 foreach (Car car in allCars)
                 {
-
+                    if (1 == 1)
+                        availableCars.Add(car);
                 }
 
                 return availableCars.ToArray();
