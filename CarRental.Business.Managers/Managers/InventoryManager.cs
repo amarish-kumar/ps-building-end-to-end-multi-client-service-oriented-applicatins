@@ -12,6 +12,8 @@ using CarRental.Data.Contracts.RepositoryInterfaces;
 using Core.Common.Exceptions;
 using System.ServiceModel;
 using CarRental.Business.Common;
+using System.Security.Permissions;
+using CarRental.Common;
 
 namespace CarRental.Business.Managers
 {
@@ -44,6 +46,8 @@ namespace CarRental.Business.Managers
         [Import]
         IBusinessEngineFactory _businessEngineFactory;
 
+        [PrincipalPermission(SecurityAction.Demand, Role = Security.CarRentalAdminRole)]
+        [PrincipalPermission(SecurityAction.Demand, Name = Security.CarRentalUser)]
         public Car GetCar(int carId)
         {
             /*try
@@ -73,6 +77,8 @@ namespace CarRental.Business.Managers
             */
         }
 
+        [PrincipalPermission(SecurityAction.Demand, Role = Security.CarRentalAdminRole)]
+        [PrincipalPermission(SecurityAction.Demand, Name = Security.CarRentalUser)]
         public Car[] GetAllCars()
         {
             return ExecuteFaultHandledOperation(() => {
@@ -93,6 +99,7 @@ namespace CarRental.Business.Managers
         }
 
         [OperationBehavior(TransactionScopeRequired = true)]
+        [PrincipalPermission(SecurityAction.Demand, Role = Security.CarRentalAdminRole)]
         public Car Update(Car car)
         {
             return ExecuteFaultHandledOperation(() => {
@@ -110,6 +117,7 @@ namespace CarRental.Business.Managers
         }
 
         [OperationBehavior(TransactionScopeRequired = true)]
+        [PrincipalPermission(SecurityAction.Demand, Role = Security.CarRentalAdminRole)]
         public void DeleteCar(int carId)
         {
             ExecuteFaultHandledOperation(() => {
@@ -119,6 +127,8 @@ namespace CarRental.Business.Managers
             });
         }
 
+        [PrincipalPermission(SecurityAction.Demand, Role = Security.CarRentalAdminRole)]
+        [PrincipalPermission(SecurityAction.Demand, Name = Security.CarRentalUser)]
         public Car[] GetAvailableCars(DateTime pickupDate, DateTime returnDate)
         {
             return ExecuteFaultHandledOperation(() => {
