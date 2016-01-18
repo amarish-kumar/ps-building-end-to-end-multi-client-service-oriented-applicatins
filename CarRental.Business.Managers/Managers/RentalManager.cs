@@ -8,6 +8,8 @@ using CarRental.Business.Entities;
 using Core.Common.Contracts;
 using System.ComponentModel.Composition;
 using System.ServiceModel;
+using CarRental.Data.Contracts.RepositoryInterfaces;
+using Core.Common.Exceptions;
 
 namespace CarRental.Business.Managers.Managers
 {
@@ -40,16 +42,23 @@ namespace CarRental.Business.Managers.Managers
             _businessEngineFactory = businessEngineFactory;
         }
 
-        /*
-        public RentalManager()
-        {
-
-        }
-       */
-
         public IEnumerable<Rental> GetRentalHistory(string loginEmail)
         {
-            throw new NotImplementedException();
+            return ExecuteFaultHandledOperation(() => {
+                IAccountRepository accountRepository = _dataRepositoryFactory.GetDataRepository<IAccountRepository>();
+                IRentalRepository rentalRepository = _dataRepositoryFactory.GetDataRepository<IRentalRepository>();
+                Account account = accountRepository.GetLogin(loginEmail);
+                if (account == null)
+                {
+                    NotFoundException ex = new NotFoundException(string.Format("No account found for login '{0}'", loginEmail));
+                    throw new FaultException<NotFoundException>(ex, ex.Message);
+                }
+
+                IEnumerable<Rental> rentalHistory = rentalRepository.GetRentalHistoryByAccount(account.AccountId);
+
+                return rentalHistory;
+
+            });
         }
     }
 }
