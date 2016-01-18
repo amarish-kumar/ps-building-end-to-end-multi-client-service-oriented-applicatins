@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.ComponentModel.Composition;// es para la linea ObjectBase.Container.SatisfyImportsOnce(this);
 using Core.Common.Core;
 using System.ServiceModel;
+using CarRental.Business.Entities;
 
 namespace CarRental.Business.Managers
 {
@@ -28,6 +29,15 @@ namespace CarRental.Business.Managers
 
             if(ObjectBase.Container != null)
             ObjectBase.Container.SatisfyImportsOnce(this);// resolve dependencies for this class after has been constructed
+
+            if (!string.IsNullOrWhiteSpace(_LoginName))
+                _AuthorizationAccount = LoadAuthorizationValidationAccount(_LoginName);
+        }
+
+        protected Account _AuthorizationAccount = null;
+        protected virtual Account LoadAuthorizationValidationAccount(string loginName)
+        {
+            return null;
         }
 
         protected T ExecuteFaultHandledOperation<T>(Func<T> codeToExecute)
