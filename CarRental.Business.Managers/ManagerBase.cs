@@ -12,8 +12,20 @@ namespace CarRental.Business.Managers
 {
     public class ManagerBase
     {
+        protected string _LoginName;
         public ManagerBase()
         {
+            OperationContext context = OperationContext.Current;
+            if (context != null)
+            {
+                // get the login from the header
+                _LoginName = context.IncomingMessageHeaders.GetHeader<string>("String", "System");
+                if (_LoginName.IndexOf(@"\") > 1)// comes from desk
+                {
+                    _LoginName = string.Empty;
+                }
+            }
+
             if(ObjectBase.Container != null)
             ObjectBase.Container.SatisfyImportsOnce(this);// resolve dependencies for this class after has been constructed
         }

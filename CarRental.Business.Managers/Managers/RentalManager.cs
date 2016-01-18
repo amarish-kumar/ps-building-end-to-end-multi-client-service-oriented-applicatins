@@ -10,6 +10,8 @@ using System.ComponentModel.Composition;
 using System.ServiceModel;
 using CarRental.Data.Contracts.RepositoryInterfaces;
 using Core.Common.Exceptions;
+using System.Security.Permissions;
+using CarRental.Common;
 
 namespace CarRental.Business.Managers.Managers
 {
@@ -42,6 +44,8 @@ namespace CarRental.Business.Managers.Managers
             _businessEngineFactory = businessEngineFactory;
         }
 
+        [PrincipalPermission(SecurityAction.Demand, Role = Security.CarRentalAdminRole)]
+        [PrincipalPermission(SecurityAction.Demand, Name = Security.CarRentalUser)]
         public IEnumerable<Rental> GetRentalHistory(string loginEmail)
         {
             return ExecuteFaultHandledOperation(() => {
