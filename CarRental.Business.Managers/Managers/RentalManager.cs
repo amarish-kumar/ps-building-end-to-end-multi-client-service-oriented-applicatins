@@ -44,6 +44,16 @@ namespace CarRental.Business.Managers.Managers
             _businessEngineFactory = businessEngineFactory;
         }
 
+        protected override Account LoadAuthorizationValidationAccount(string loginName)
+        {
+            IAccountRepository accountRepository = _dataRepositoryFactory.GetDataRepository<IAccountRepository>();
+            Account authAcct = accountRepository.GetLogin(loginName);
+            if (authAcct == null)
+                throw new NotFoundException(string.Format("Cannot find account for login name {0} to use for security trimming", loginName));
+
+            return authAcct;
+        }
+
         [PrincipalPermission(SecurityAction.Demand, Role = Security.CarRentalAdminRole)]
         [PrincipalPermission(SecurityAction.Demand, Name = Security.CarRentalUser)]
         public IEnumerable<Rental> GetRentalHistory(string loginEmail)
@@ -57,6 +67,8 @@ namespace CarRental.Business.Managers.Managers
                     NotFoundException ex = new NotFoundException(string.Format("No account found for login '{0}'", loginEmail));
                     throw new FaultException<NotFoundException>(ex, ex.Message);
                 }
+
+                ValidateAuthorization(account);
 
                 IEnumerable<Rental> rentalHistory = rentalRepository.GetRentalHistoryByAccount(account.AccountId);
 

@@ -11,7 +11,7 @@ using System.Runtime.Serialization;
 namespace CarRental.Business.Entities
 {
     [DataContract]
-    public class Account : EntityBase, IIdentifiableEntity
+    public class Account : EntityBase, IIdentifiableEntity, IAccountOwnedEntity
     {
         [DataMember]
         public int AccountId { get; set; }
@@ -53,6 +53,14 @@ namespace CarRental.Business.Entities
             set
             {
                 AccountId = value;
+            }
+        }
+
+        public int OwnerAccountId
+        {
+            get
+            {
+                return AccountId;
             }
         }
     }

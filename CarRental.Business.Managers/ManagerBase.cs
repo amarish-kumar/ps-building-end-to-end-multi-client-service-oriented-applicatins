@@ -8,6 +8,9 @@ using System.ComponentModel.Composition;// es para la linea ObjectBase.Container
 using Core.Common.Core;
 using System.ServiceModel;
 using CarRental.Business.Entities;
+using Core.Common.Contracts;
+using System.Threading;
+using CarRental.Common;
 
 namespace CarRental.Business.Managers
 {
@@ -38,6 +41,21 @@ namespace CarRental.Business.Managers
         protected virtual Account LoadAuthorizationValidationAccount(string loginName)
         {
             return null;
+        }
+
+        protected void ValidateAuthorization(IAccountOwnedEntity entity)
+        {
+            if (!Thread.CurrentPrincipal.IsInRole(Security.CarRentalAdminRole))
+            {
+                if (_AuthorizationAccount != null)
+                {
+                    if (_LoginName != string.Empty && entity.OwnerAccountId != _AuthorizationAccount.AccountId)
+                    {
+                        AuthorizationValidationException ex = new AuthorizationValidationException("Attempt to access a secure");
+                        throw new FaultException<AuthorizationValidationException>(ex, ex.Message);
+                    }
+                }
+            }
         }
 
         protected T ExecuteFaultHandledOperation<T>(Func<T> codeToExecute)
