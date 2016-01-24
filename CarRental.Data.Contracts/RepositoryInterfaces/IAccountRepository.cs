@@ -10,6 +10,6 @@ namespace CarRental.Data.Contracts.RepositoryInterfaces
 {
     public interface IAccountRepository : IDataRepository<Account>
     {
-        Account GetLogin(string login);
+        Account GetByLogin(string login);
     }
 }

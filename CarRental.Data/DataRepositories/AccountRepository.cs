@@ -43,7 +43,7 @@ namespace CarRental.Data.DataRepositories
                     select e).FirstOrDefault();
         }
 
-        public Account GetLogin(string login)
+        public Account GetByLogin(string login)
         {
             using (CarRentalContext entityContext = new CarRentalContext())
             {

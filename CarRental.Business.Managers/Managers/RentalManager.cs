@@ -50,7 +50,7 @@ namespace CarRental.Business.Managers.Managers
         protected override Account LoadAuthorizationValidationAccount(string loginName)
         {
             IAccountRepository accountRepository = _dataRepositoryFactory.GetDataRepository<IAccountRepository>();
-            Account authAcct = accountRepository.GetLogin(loginName);
+            Account authAcct = accountRepository.GetByLogin(loginName);
             if (authAcct == null)
             {
                 NotFoundException ex = new NotFoundException(string.Format("Cannot find account for login name {0} to use for security trimming", loginName));
@@ -67,7 +67,7 @@ namespace CarRental.Business.Managers.Managers
             return ExecuteFaultHandledOperation(() => {
                 IAccountRepository accountRepository = _dataRepositoryFactory.GetDataRepository<IAccountRepository>();
                 IRentalRepository rentalRepository = _dataRepositoryFactory.GetDataRepository<IRentalRepository>();
-                Account account = accountRepository.GetLogin(loginEmail);
+                Account account = accountRepository.GetByLogin(loginEmail);
                 if (account == null)
                 {
                     NotFoundException ex = new NotFoundException(string.Format("No account found for login '{0}'", loginEmail));
@@ -133,7 +133,7 @@ namespace CarRental.Business.Managers.Managers
                 IAccountRepository accountRepository = _dataRepositoryFactory.GetDataRepository<IAccountRepository>();
                 IReservationRepository reservationRepository = _dataRepositoryFactory.GetDataRepository<IReservationRepository>();
 
-                Account account = accountRepository.GetLogin(loginEmail);
+                Account account = accountRepository.GetByLogin(loginEmail);
                 if (account == null)
                 {
                     NotFoundException ex = new NotFoundException(string.Format("No account found for login '{0}'.", loginEmail));
@@ -221,6 +221,174 @@ namespace CarRental.Business.Managers.Managers
                 ICarRentalEngine carRentalEngine = _businessEngineFactory.GetBusinessEngine<ICarRentalEngine>();
 
                 return carRentalEngine.IsCarCurrentlyRented(carId);
+            });
+        }
+
+        [OperationBehavior(TransactionScopeRequired = true)]
+        public Rental RentCarToCustomer(string loginEmail, int carId, DateTime dateDueBack)
+        {
+            return ExecuteFaultHandledOperation(() =>
+            {
+                ICarRentalEngine carRentalEngine = _businessEngineFactory.GetBusinessEngine<ICarRentalEngine>();
+
+                try
+                {
+                    Rental rental = carRentalEngine.RentCarToCustomer(loginEmail, carId, DateTime.Now, dateDueBack);
+
+                    return rental;
+                }
+                catch (UnableToRentForDateException ex)
+                {
+                    throw new FaultException<UnableToRentForDateException>(ex, ex.Message);
+                }
+                catch (CarCurrentlyRentedException ex)
+                {
+                    throw new FaultException<CarCurrentlyRentedException>(ex, ex.Message);
+                }
+                catch (NotFoundException ex)
+                {
+                    throw new FaultException<NotFoundException>(ex, ex.Message);
+                }
+            });
+        }
+
+        [OperationBehavior(TransactionScopeRequired = true)]
+        public Rental RentCarToCustomer(string loginEmail, int carId, DateTime rentalDate, DateTime dateDueBack)
+        {
+            return ExecuteFaultHandledOperation(() =>
+            {
+                ICarRentalEngine carRentalEngine = _businessEngineFactory.GetBusinessEngine<ICarRentalEngine>();
+
+                try
+                {
+                    Rental rental = carRentalEngine.RentCarToCustomer(loginEmail, carId, rentalDate, dateDueBack);
+
+                    return rental;
+                }
+                catch (UnableToRentForDateException ex)
+                {
+                    throw new FaultException<UnableToRentForDateException>(ex, ex.Message);
+                }
+                catch (CarCurrentlyRentedException ex)
+                {
+                    throw new FaultException<CarCurrentlyRentedException>(ex, ex.Message);
+                }
+                catch (NotFoundException ex)
+                {
+                    throw new FaultException<NotFoundException>(ex, ex.Message);
+                }
+            });
+        }
+
+        [OperationBehavior(TransactionScopeRequired = true)]
+        public void AcceptCarReturn(int carId)
+        {
+            ExecuteFaultHandledOperation(() =>
+            {
+                IRentalRepository rentalRepository = _dataRepositoryFactory.GetDataRepository<IRentalRepository>();
+                ICarRentalEngine carRentalEngine = _businessEngineFactory.GetBusinessEngine<ICarRentalEngine>();
+
+                Rental rental = rentalRepository.GetCurrentRentalByCar(carId);
+                if (rental == null)
+                {
+                    CarNotRentedException ex = new CarNotRentedException(string.Format("Car {0} is not currently rented.", carId));
+                    throw new FaultException<CarNotRentedException>(ex, ex.Message);
+                }
+
+                rental.DateReturned = DateTime.Now;
+
+                Rental updatedRentalEntity = rentalRepository.Update(rental);
+            });
+        }
+
+        public Reservation GetReservation(int reservationId)
+        {
+            return ExecuteFaultHandledOperation(() =>
+            {
+                IAccountRepository accountRepository = _dataRepositoryFactory.GetDataRepository<IAccountRepository>();
+                IReservationRepository reservationRepository = _dataRepositoryFactory.GetDataRepository<IReservationRepository>();
+
+                Reservation reservation = reservationRepository.Get(reservationId);
+                if (reservation == null)
+                {
+                    NotFoundException ex = new NotFoundException(string.Format("No reservation found for id '{0}'.", reservationId));
+                    throw new FaultException<NotFoundException>(ex, ex.Message);
+                }
+
+                return reservation;
+            });
+        }
+
+        [OperationBehavior(TransactionScopeRequired = true)]
+        public Reservation MakeReservation(string loginEmail, int carId, DateTime rentalDate, DateTime returnDate)
+        {
+            return ExecuteFaultHandledOperation(() =>
+            {
+                IAccountRepository accountRepository = _dataRepositoryFactory.GetDataRepository<IAccountRepository>();
+                IReservationRepository reservationRepository = _dataRepositoryFactory.GetDataRepository<IReservationRepository>();
+
+                Account account = accountRepository.GetByLogin(loginEmail);
+                if (account == null)
+                {
+                    NotFoundException ex = new NotFoundException(string.Format("No account found for login '{0}'.", loginEmail));
+                    throw new FaultException<NotFoundException>(ex, ex.Message);
+                }
+
+                Reservation reservation = new Reservation()
+                {
+                    AccountId = account.AccountId,
+                    CarId = carId,
+                    RentalDate = rentalDate,
+                    ReturnDate = returnDate
+                };
+
+                Reservation savedEntity = reservationRepository.Add(reservation);
+
+                return savedEntity;
+            });
+        }
+
+        [OperationBehavior(TransactionScopeRequired = true)]
+        public void ExecuteRentalFromReservation(int reservationId)
+        {
+            ExecuteFaultHandledOperation(() =>
+            {
+                IAccountRepository accountRepository = _dataRepositoryFactory.GetDataRepository<IAccountRepository>();
+                IReservationRepository reservationRepository = _dataRepositoryFactory.GetDataRepository<IReservationRepository>();
+                ICarRentalEngine carRentalEngine = _businessEngineFactory.GetBusinessEngine<ICarRentalEngine>();
+
+                Reservation reservation = reservationRepository.Get(reservationId);
+                if (reservation == null)
+                {
+                    NotFoundException ex = new NotFoundException(string.Format("Reservation {0} is not found.", reservationId));
+                    throw new FaultException<NotFoundException>(ex, ex.Message);
+                }
+
+                Account account = accountRepository.Get(reservation.AccountId);
+                if (account == null)
+                {
+                    NotFoundException ex = new NotFoundException(string.Format("No account found for account ID '{0}'.", reservation.AccountId));
+                    throw new FaultException<NotFoundException>(ex, ex.Message);
+                }
+
+                try
+                {
+                    Rental rental = carRentalEngine.RentCarToCustomer(account.LoginEmail, reservation.CarId, reservation.RentalDate, reservation.ReturnDate);
+                }
+                catch (UnableToRentForDateException ex)
+                {
+                    throw new FaultException<UnableToRentForDateException>(ex, ex.Message);
+                }
+                catch (CarCurrentlyRentedException ex)
+                {
+                    throw new FaultException<CarCurrentlyRentedException>(ex, ex.Message);
+                }
+                catch (NotFoundException ex)
+                {
+                    throw new FaultException<NotFoundException>(ex, ex.Message);
+                }
+
+                reservationRepository.Remove(reservation);
             });
         }
     }

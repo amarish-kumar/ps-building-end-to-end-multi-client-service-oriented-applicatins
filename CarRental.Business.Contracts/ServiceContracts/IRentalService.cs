@@ -14,7 +14,6 @@ namespace CarRental.Business.Contracts.ServiceContracts
     [ServiceContract]
     public interface IRentalService
     {
-        /*
         [OperationContract(Name = "RentCarToCustomerImmediately")]
         [TransactionFlow(TransactionFlowOption.Allowed)]
         [FaultContract(typeof(NotFoundException))]
@@ -34,11 +33,21 @@ namespace CarRental.Business.Contracts.ServiceContracts
         [FaultContract(typeof(AuthorizationValidationException))]
         [TransactionFlow(TransactionFlowOption.Allowed)]
         void AcceptCarReturn(int carId);
-        */
 
         [OperationContract]
         [FaultContract(typeof(AuthorizationValidationException))]
         IEnumerable<Rental> GetRentalHistory(string loginEmail);
+
+        [OperationContract]
+        [FaultContract(typeof(NotFoundException))]
+        [FaultContract(typeof(AuthorizationValidationException))]
+        Reservation GetReservation(int reservationId);
+
+        [OperationContract]
+        [FaultContract(typeof(NotFoundException))]
+        [FaultContract(typeof(AuthorizationValidationException))]
+        [TransactionFlow(TransactionFlowOption.Allowed)]
+        Reservation MakeReservation(string loginEmail, int carId, DateTime rentalDate, DateTime returnDate);
 
         [OperationContract]
         [FaultContract(typeof(NotFoundException))]
@@ -75,5 +84,11 @@ namespace CarRental.Business.Contracts.ServiceContracts
         [FaultContract(typeof(NotFoundException))]
         [FaultContract(typeof(AuthorizationValidationException))]
         bool IsCarCurrentlyRented(int carId);
+
+        [OperationContract]
+        [FaultContract(typeof(NotFoundException))]
+        [FaultContract(typeof(AuthorizationValidationException))]
+        [TransactionFlow(TransactionFlowOption.Allowed)]
+        void ExecuteRentalFromReservation(int reservationId);
     }
 }
