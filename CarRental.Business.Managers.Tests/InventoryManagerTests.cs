@@ -5,12 +5,24 @@ using CarRental.Business.Entities;
 using Moq;
 using Core.Common.Contracts;
 using CarRental.Data.Contracts.RepositoryInterfaces;
+using System.Security.Principal;
+using System.Threading;
 
 namespace CarRental.Business.Managers.Tests
 {
     [TestClass]
     public class InventoryManagerTests
     {
+        [TestInitialize]
+        public void Initialize()
+        {
+            GenericPrincipal principal = new GenericPrincipal(
+                new GenericIdentity("Servando"),
+                new string[] { "CarRentalAdmin" }
+                );
+            Thread.CurrentPrincipal = principal;
+        }
+
         [TestMethod]
         public void UpdateCar_add_new()
         {
