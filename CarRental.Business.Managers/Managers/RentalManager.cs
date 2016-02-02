@@ -18,7 +18,7 @@ using CarRental.Business.Common;
 
 namespace CarRental.Business.Managers.Managers
 {
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, ConcurrencyMode = ConcurrencyMode.Multiple)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, ConcurrencyMode = ConcurrencyMode.Multiple, ReleaseServiceInstanceOnTransactionComplete = false)]
     public class RentalManager : ManagerBase, IRentalService
     {
         [Import]
