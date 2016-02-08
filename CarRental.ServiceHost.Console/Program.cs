@@ -12,6 +12,8 @@ using Core.Common;
 using SM = System.ServiceModel;
 using CarRental.Business.Managers.Managers;
 using System.Transactions;
+using System.Security.Principal;
+using System.Threading;
 
 namespace CarRental.ServiceHost
 {
@@ -19,6 +21,14 @@ namespace CarRental.ServiceHost
     {
         static void Main(string[] args)
         {
+            GenericPrincipal principal = new GenericPrincipal(
+            new GenericIdentity("Servando"), 
+            new string[] { "CarRentalAdmin" }
+                );
+            Thread.CurrentPrincipal = principal;
+
+
+
             Console.WriteLine("Starting up services...");
             Console.WriteLine("");
 
