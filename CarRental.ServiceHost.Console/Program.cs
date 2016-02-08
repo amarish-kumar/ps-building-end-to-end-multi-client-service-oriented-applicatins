@@ -14,6 +14,8 @@ using CarRental.Business.Managers.Managers;
 using System.Transactions;
 using System.Security.Principal;
 using System.Threading;
+using Core.Common.Contracts;
+using Core.Common.Core;
 
 namespace CarRental.ServiceHost
 {
@@ -27,7 +29,7 @@ namespace CarRental.ServiceHost
                 );
             Thread.CurrentPrincipal = principal;
 
-
+            ObjectBase.Container = MEFLoader.Init();
 
             Console.WriteLine("Starting up services...");
             Console.WriteLine("");
@@ -64,6 +66,8 @@ namespace CarRental.ServiceHost
 
         private static void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
+            Console.WriteLine("Looking for dead reservations at {0}", DateTime.Now.ToString());
+
             RentalManager rentalManager = new RentalManager();
             Reservation[] reservations = rentalManager.GetDeadReservations();
             if (reservations != null)
@@ -75,6 +79,7 @@ namespace CarRental.ServiceHost
                         using (TransactionScope scope = new TransactionScope())
                         {
                             rentalManager.CancelReservation(reservation.ReservationId);
+                            Console.WriteLine("Cancelling reservation '{0}'", reservation.ReservationId);
                             scope.Complete();
                         }
                     }

@@ -34,6 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
@@ -63,6 +64,10 @@
     <ProjectReference Include="..\CarRental.Business.Managers\CarRental.Business.Managers.csproj">
       <Project>{a83f35de-d998-4a27-b98c-8320090d7f56}</Project>
       <Name>CarRental.Business.Managers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Core.Common.Contracts\Core.Common.Contracts.csproj">
+      <Project>{5fb87b13-3735-4375-89de-2b4903868b96}</Project>
+      <Name>Core.Common.Contracts</Name>
     </ProjectReference>
     <ProjectReference Include="..\Core.Common\Core.Common.csproj">
       <Project>{62a5cd4d-3671-44e1-a8e8-4da04e6b8687}</Project>
