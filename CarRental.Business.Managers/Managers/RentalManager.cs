@@ -84,6 +84,8 @@ namespace CarRental.Business.Managers.Managers
         }
 
         [OperationBehavior(TransactionScopeRequired = true)]
+        [PrincipalPermission(SecurityAction.Demand, Role = Security.CarRentalAdminRole)]
+        [PrincipalPermission(SecurityAction.Demand, Name = Security.CarRentalUser)]
         public void CancelReservation(int reservationId)
         {
             ExecuteFaultHandledOperation(() =>
@@ -202,6 +204,7 @@ namespace CarRental.Business.Managers.Managers
             });
         }
 
+        [PrincipalPermission(SecurityAction.Demand, Role = Security.CarRentalAdminRole)]
         public Reservation[] GetDeadReservations()
         {
             return ExecuteFaultHandledOperation(() =>
