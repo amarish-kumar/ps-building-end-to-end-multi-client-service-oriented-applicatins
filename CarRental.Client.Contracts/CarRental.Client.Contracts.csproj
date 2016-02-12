@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5FB87B13-3735-4375-89DE-2B4903868B96}</ProjectGuid>
+    <ProjectGuid>{6D2F2E68-282E-4055-AEAC-F54E95D84CF9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Core.Common.Contracts</RootNamespace>
-    <AssemblyName>Core.Common.Contracts</AssemblyName>
+    <RootNamespace>CarRental.Client.Contracts</RootNamespace>
+    <AssemblyName>CarRental.Client.Contracts</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -32,6 +32,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -40,15 +42,36 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IAccountOwnedEntity.cs" />
-    <Compile Include="IBusinessEngine.cs" />
-    <Compile Include="IBusinessEngineFactory.cs" />
-    <Compile Include="IDataRepository.cs" />
-    <Compile Include="IDataRepositoryFactory.cs" />
-    <Compile Include="IDirtyCapable.cs" />
-    <Compile Include="IIdentifiableEntity.cs" />
-    <Compile Include="IServiceContract.cs" />
+    <Compile Include="Class1.cs" />
+    <Compile Include="DataContracts\CustomerRentalData.cs" />
+    <Compile Include="DataContracts\CustomerReservationData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServiceContracts\IAccountService.cs" />
+    <Compile Include="ServiceContracts\IInventoryService.cs" />
+    <Compile Include="ServiceContracts\IRentalService.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\CarRental.Client.Entities\CarRental.Client.Entities.csproj">
+      <Project>{90856995-0134-4643-9760-c77f50d5d009}</Project>
+      <Name>CarRental.Client.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CarRental.Common\CarRental.Common.csproj">
+      <Project>{cb0cf054-47fe-4e21-8f81-c7cc70c5bc53}</Project>
+      <Name>CarRental.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Core.Common.Contracts\Core.Common.Contracts.csproj">
+      <Project>{5fb87b13-3735-4375-89de-2b4903868b96}</Project>
+      <Name>Core.Common.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Core.Common.ServiceModel\Core.Common.ServiceModel.csproj">
+      <Project>{98c987e7-8505-4ddf-87c2-c608250374ac}</Project>
+      <Name>Core.Common.ServiceModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Core.Common\Core.Common.csproj">
+      <Project>{62a5cd4d-3671-44e1-a8e8-4da04e6b8687}</Project>
+      <Name>Core.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
