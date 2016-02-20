@@ -9,9 +9,12 @@ using System.ServiceModel;
 using CarRental.Client.Entities;
 using CarRental.Client.Contracts.ServiceContracts;
 using CarRental.Client.Contracts.DataContracts;
+using System.ComponentModel.Composition;
 
 namespace CarRental.Client.Proxies
 {
+    [Export(typeof(IRentalService))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     public class RentalClient : ClientBase<IRentalService>, IRentalService
     {
         public void AcceptCarReturn(int carId)
