@@ -43,10 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccountClient.cs" />
-    <Compile Include="InventoryClient.cs" />
+    <Compile Include="ServiceFactory.cs" />
+    <Compile Include="ServiceProxies\AccountClient.cs" />
+    <Compile Include="ServiceProxies\InventoryClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RentalClient.cs" />
+    <Compile Include="ServiceProxies\RentalClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CarRental.Client.Contracts\CarRental.Client.Contracts.csproj">
