@@ -11,22 +11,14 @@ using CarRental.Client.Contracts.ServiceContracts;
 using CarRental.Client.Contracts.DataContracts;
 using System.ComponentModel.Composition;
 using System.Threading;
+using Core.Common.ServiceModel;
 
 namespace CarRental.Client.Proxies
 {
     [Export(typeof(IRentalService))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public class RentalClient : ClientBase<IRentalService>, IRentalService
+    public class RentalClient : UserClientBase<IRentalService>, IRentalService
     {
-        public RentalClient()
-        {
-            string userName = Thread.CurrentPrincipal.Identity.Name;
-            MessageHeader<string> header = new MessageHeader<string>(userName);
-            OperationContextScope contextScope = new OperationContextScope(InnerChannel);
-            OperationContext.Current.OutgoingMessageHeaders.Add(
-                header.GetUntypedHeader("String", "System")
-                );
-        }
         public void AcceptCarReturn(int carId)
         {
             Channel.AcceptCarReturn(carId);

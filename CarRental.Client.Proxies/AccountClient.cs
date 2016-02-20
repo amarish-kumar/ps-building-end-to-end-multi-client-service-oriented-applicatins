@@ -8,12 +8,13 @@ using CarRental.Client.Contracts;
 using System.ServiceModel;
 using CarRental.Client.Entities;
 using System.ComponentModel.Composition;
+using Core.Common.ServiceModel;
 
 namespace CarRental.Client.Proxies
 {
     [Export(typeof(IAccountService))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public class AccountClient : ClientBase<IAccountService>, IAccountService
+    public class AccountClient : UserClientBase<IAccountService>, IAccountService
     {
         public Account GetCustomerAccountInfo(string loginEmail)
         {
