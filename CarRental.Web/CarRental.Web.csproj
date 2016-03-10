@@ -573,10 +573,13 @@
     <Compile Include="Adapters\SecurityAdapter.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\MVC\AccountController.cs" />
+    <Compile Include="Controllers\MVC\HomeController.cs" />
     <Compile Include="Core\ApiControllerBase.cs" />
     <Compile Include="Core\ISecurityAdapter.cs" />
     <Compile Include="Core\IServiceAwareController.cs" />
     <Compile Include="Core\MefDependencyResolver.cs" />
+    <Compile Include="Core\ViewControllerBase.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -611,9 +614,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Controllers\" />
+    <Folder Include="Controllers\API\" />
     <Folder Include="Images\" />
     <Folder Include="Models\" />
+    <Folder Include="Views\Account\" />
+    <Folder Include="Views\Home\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CarRental.Client.Bootstrapper\CarRental.Client.Bootstrapper.csproj">
