@@ -4,10 +4,12 @@ using System.Linq;
 using System.Web;
 
 using System.ComponentModel.Composition;
+using CarRental.Web.Core;
+using WebMatrix.Data;
+using WebMatrix.WebData;
 
 namespace CarRental.Web.Services
 {
-    /*
     [Export(typeof(ISecurityAdapter))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class SecurityAdapter : ISecurityAdapter
@@ -38,5 +40,4 @@ namespace CarRental.Web.Services
             return WebSecurity.UserExists(loginEmail);
         }
     }
-    */
 }
