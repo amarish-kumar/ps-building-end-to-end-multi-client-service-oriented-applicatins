@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 using CarRental.Web.Core;
 using System.ComponentModel.Composition;
+using CarRental.Web.Models;
 
 namespace CarRental.Web.Controllers.MVC
 {
@@ -24,10 +25,10 @@ namespace CarRental.Web.Controllers.MVC
 
         [HttpGet]
         [Route("login")]// acount/login
-        public ActionResult Login()
+        public ActionResult Login(string returnUrl)
         {
             _SecurityAdapter.Initialize();
-            return View();
+            return View(new AccountLoginModel() { ReturnUrl = returnUrl });
         }
     }
 }
